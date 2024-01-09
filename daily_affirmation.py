@@ -89,14 +89,17 @@ inspiration = ["The only limit to our realization of tomorrow will be our doubts
 
 import random
 import os
-import datetime
-import time
+import schedule  # Import the schedule library
 
-while(True):
-    inspo = random.choice(inspiration)
-    def notify(title, text):
-        os.system("""
-                  osascript -e 'display notification "{}" with title "{}"'
-                  """.format(text, title))
-    notify("Time for your daily affirmation, Tony!", inspo)
+def send_affirmation():
+    try:
+        affirmation = random.choice(inspirations)
+        os.system(f"""osascript -e 'display notification "{affirmation}" with title "Daily Affirmation"'""")
+    except Exception as e:
+        print("Error sending notification:", e)
+
+schedule.every().day.at("10:00").do(send_affirmation)  # Schedule a daily notification at 10:00 AM
+
+while True:
+    schedule.run_pending()  # Run any scheduled tasks
     time.sleep(1)
